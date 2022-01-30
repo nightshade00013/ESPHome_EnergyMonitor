@@ -1,0 +1,187 @@
+# Placeholder while working.  This is similar to the 2 channel whole home split phase energy meter but has a board with 2 ports for 2 energy meters
+# intended for solar panel monitoring as well.  This can be purchased here:
+# https://circuitsetup.us/product/split-single-phase-real-time-whole-house-energy-meter-solar-kit-2-energy-meters-programmed-esp32-4-cts/
+# !!This is currently a work in progress and not intended for use.!!
+#
+
+
+
+
+
+
+substitutions:
+  disp_name: Energy Meter  # Change the disp_name to something you want
+  update_time: 10s  # Interval of how often the power is updated
+  devicename: energymeter  #The device's name, MUST BE LOWERCASE!!!!
+  
+esphome:
+  name: $devicename
+  platform: ESP32
+  board: nodemcu-32s
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_pass
+  manual_ip:  # Static IP address information.  Recomended to be set for your devices but can be commented out (#) to use DHCP.
+    static_ip: !secret ip_address
+    gateway: !secret ip_gateway
+    subnet: !secret ip_subnet
+#    dns1: !secret ip_dns1  #Remove or comment out to prevent DNS access.
+         
+  ap:  # Enable fallback hotspot (captive portal) in case wifi connection fails
+    ssid: "${disp_name} Hotspot"
+    password: "Sup3r_Secre7_P@ssword"  #Change to whatever you would like or remove for open AP mode access
+
+#mqtt:  # Comment out this section if using API with (#) 
+#  broker: !secret mqtt_broker
+#  username: !secret mqtt_user
+#  password: !secret mqtt_pass
+
+logger:   # Enable logging
+
+api:  # Comment out this section if using MQTT with (#)  If Disabled you can only pull Time from a NTP server, READ BELOW!!!
+
+ota: #Enable OTA Updates, comment out (#) this section if you do not want to wirelessly update.  !!Warning, this will require using a cable if commented out.!!
+  #password: "Sup3r_Secre7_P@ssword"  # Super Secret OTA Password.  Uncomment to secure OTA Updating
+  
+web_server:  #Display information available on a web page to troubleshoot directly or access via web page.  The Sensor information will be displayed in a table along with a debug log.
+  port: 80
+
+spi:
+  clk_pin: 18
+  miso_pin: 19
+  mosi_pin: 23
+
+sensor:
+  - platform: wifi_signal
+    name: ${disp_name} WiFi Signal
+    update_interval: 60s
+  - platform: atm90e32
+    cs_pin: 5
+    phase_a:
+      voltage:
+        name: ${disp_name} Volts
+        accuracy_decimals: 1
+      current:
+        name: ${disp_name} CT1 Amps
+        id: "ct1Amps"
+      power:
+        name: ${disp_name} CT1 Watts
+        accuracy_decimals: 1
+        id: "ct1Watts"
+        filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
+          - multiply: -1.0
+      gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
+      gain_ct: 24131  # Current calibration  
+    phase_c:
+      current:
+        name: ${disp_name} CT2 Amps
+        id: "ct2Amps"
+      power:
+        name: ${disp_name} CT2 Watts
+        accuracy_decimals: 1
+        id: "ct2Watts"
+        filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
+          - multiply: -1.0
+      gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
+      gain_ct: 24131  # Current calibration
+    frequency:
+      name: ${disp_name} Freq
+    line_frequency: 60Hz
+    gain_pga: 2X
+    update_interval: ${update_time}
+    cs_pin: 6
+    phase_a:
+      voltage:
+        name: ${disp_name} Volts
+        accuracy_decimals: 1
+      current:
+        name: ${disp_name} CT3 Amps
+        id: "ct3Amps"
+      power:
+        name: ${disp_name} CT3 Watts
+        accuracy_decimals: 1
+        id: "ct3Watts"
+        filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
+          - multiply: -1.0
+      gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
+      gain_ct: 24131  # Current calibration  
+    phase_c:
+      current:
+        name: ${disp_name} CT4 Amps
+        id: "ct4Amps"
+      power:
+        name: ${disp_name} CT4 Watts
+        accuracy_decimals: 1
+        id: "ct4Watts"
+        filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
+          - multiply: -1.0
+      gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
+      gain_ct: 24131  # Current calibration
+    frequency:
+      name: ${disp_name} Freq
+    line_frequency: 60Hz
+    gain_pga: 2X
+    update_interval: ${update_time}
+    
+#Grid Watts and Amps!!
+  - platform: template
+    name: ${disp_name} Total Amps
+    id: "totalAmps"
+    lambda: return id(ct1Amps).state + id(ct2Amps).state;
+    accuracy_decimals: 2
+    unit_of_measurement: A
+    update_interval: ${update_time}
+    icon: "mdi:flash-circle"
+  - platform: template
+    name: ${disp_name} Total Watts
+    id: "totalWatts"
+    lambda: return id(ct1Watts).state + id(ct2Watts).state;
+    accuracy_decimals: 0
+    unit_of_measurement: W
+    icon: "mdi:flash-circle"
+    update_interval: ${update_time}
+    
+    
+#  Solar Watts and Amps!!
+  - platform: template
+    name: ${disp_name} Total Amps
+    id: "totalAmps2"
+    lambda: return id(ct3Amps).state + id(ct4Amps).state;
+    accuracy_decimals: 2
+    unit_of_measurement: A
+    update_interval: ${update_time}
+    icon: "mdi:flash-circle"
+  - platform: template
+    name: ${disp_name} Total Watts
+    id: "totalWatts2"
+    lambda: return id(ct3Watts).state + id(ct4Watts).state;
+    accuracy_decimals: 0
+    unit_of_measurement: W
+    icon: "mdi:flash-circle"
+    update_interval: ${update_time}
+
+  - platform: total_daily_energy
+    name: ${disp_name} Total kWh
+    power_id: totalWatts
+    filters:
+      - multiply: 0.001
+    unit_of_measurement: kWh
+    
+    - platform: total_daily_energy
+    name: ${disp_name} Total kWh
+    power_id: totalWatts2
+    filters:
+      - multiply: 0.001
+    unit_of_measurement: kWh
+
+time:  #Pull current time information SNTP must be used if API is disabled above.  Recommend using API if your devices will not have internet access!!
+#  - platform: sntp  #Use NTP time protocol.  This will automatically pull time information on bootup from default NTP servers.
+#    id: sntp_time
+    
+  - platform: homeassistant  #Use current HomeAssistant time.  This will automatically pull time from HomeAssistant on a regular basis though the API.
+    id: homeassistant_time
+
+switch:  #Shows a "Toggle" button on the Web Page to restart the device.
+  - platform: restart
+    name: ${disp_name} Restart
