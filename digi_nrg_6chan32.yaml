@@ -1,36 +1,39 @@
 substitutions:
-# Change the disp_name to something you want  
-  disp_name: 6C
-# Interval of how often the power is updated
-  update_time: 10s
-
+  disp_name: Energy Meter  # Change the disp_name to something you want
+  update_time: 10s  # Interval of how often the power is updated
+  devicename: energymeter  #The device's name, MUST BE LOWERCASE!!!!
+  
 esphome:
-  name: digi_nrg_6chan32
+  name: $devicename
   platform: ESP32
   board: nodemcu-32s
-   
+
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_pass
-  manual_ip:
-    static_ip: !secret ip_eh_nrgnode
+  manual_ip:  # Static IP address information.  Recomended to be set for your devices but can be commented out (#) to use DHCP.
+    static_ip: !secret ip_address
     gateway: !secret ip_gateway
     subnet: !secret ip_subnet
-    dns1: !secret ip_dns1
+#    dns1: !secret ip_dns1  #Remove or comment out to prevent DNS access.
+         
+  ap:  # Enable fallback hotspot (captive portal) in case wifi connection fails
+    ssid: "${disp_name} Hotspot"
+    password: "Sup3r_Secre7_P@ssword"  #Change to whatever you would like or remove for open AP mode access
 
-mqtt:
-  broker: !secret mqtt_broker
-  username: !secret mqtt_user
-  password: !secret mqtt_pass
+#mqtt:  # Comment out this section if using API with (#) 
+#  broker: !secret mqtt_broker
+#  username: !secret mqtt_user
+#  password: !secret mqtt_pass
 
-# Enable logging
-logger:
+logger:   # Enable logging
 
-#api:
+api:  # Comment out this section if using MQTT with (#)  If Disabled you can only pull Time from a NTP server, READ BELOW!!!
 
-ota:
-
-web_server:
+ota: #Enable OTA Updates, comment out (#) this section if you do not want to wirelessly update.  !!Warning, this will require using a cable if commented out.!!
+  #password: "Sup3r_Secre7_P@ssword"  # Super Secret OTA Password.  Uncomment to secure OTA Updating
+  
+web_server:  #Display information available on a web page to troubleshoot directly or access via web page.  The Sensor information will be displayed in a table along with a debug log.
   port: 80
 
 spi:
@@ -181,10 +184,13 @@ sensor:
       - multiply: 0.001
     unit_of_measurement: kWh
     
-switch:
-  - platform: restart
-    name: ${disp_name} Restart  
-time:
-  - platform: sntp
-    id: sntp_time    
+time:  #Pull current time information SNTP must be used if API is disabled above.  Recommend using API if your devices will not have internet access!!
+#  - platform: sntp  #Use NTP time protocol.  This will automatically pull time information on bootup from default NTP servers.
+#    id: sntp_time
     
+  - platform: homeassistant  #Use current HomeAssistant time.  This will automatically pull time from HomeAssistant on a regular basis though the API.
+    id: homeassistant_time
+
+switch:  #Shows a "Toggle" button on the Web Page to restart the device.
+  - platform: restart
+    name: ${disp_name} Restart
