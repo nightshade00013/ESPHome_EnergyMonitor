@@ -1,7 +1,9 @@
-# digiNRG - Whole Home Power Monitoring with ESPHome
+# Fork of digiNRG - Whole Home Power Monitoring with ESPHome
 Whole home power monitoring and additional power circuits with ESPHome and Home Assistant. This implementation utilizes the ATM90E32AS based board from CircuitSetup. Other home automation software supporting MQTT can also use this integration.
 
 Video Demostration and Setup - https://youtu.be/BOgy6QbfeZk
+ESP Home Information for the atm90e32 -   https://esphome.io/components/sensor/atm90e32.html
+
 
 Update 2019/08/24 - For v1.2 of the board your voltage calibration will be high, >64,000. This is normal.
 
