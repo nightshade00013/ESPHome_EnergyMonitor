@@ -1,14 +1,3 @@
-# Placeholder while working.  This is similar to the 2 channel whole home split phase energy meter but has a board with 2 ports for 2 energy meters
-# intended for solar panel monitoring as well.  This can be purchased here:
-# https://circuitsetup.us/product/split-single-phase-real-time-whole-house-energy-meter-solar-kit-2-energy-meters-programmed-esp32-4-cts/
-# !!This is currently a work in progress and not intended for use.!!
-#
-
-
-
-
-
-
 substitutions:
   disp_name: Energy Meter  # Change the disp_name to something you want
   update_time: 10s  # Interval of how often the power is updated
@@ -91,7 +80,7 @@ sensor:
     gain_pga: 2X
     update_interval: ${update_time}
   - platform: atm90e32
-    cs_pin: 9  # Pin currently wrong!!!!!
+    cs_pin: 4  # Warnings will pop but it's hard wired.
     phase_a:
       voltage:
         name: ${disp_name} Volts
@@ -127,7 +116,7 @@ sensor:
     
 #Grid Watts and Amps!!
   - platform: template
-    name: ${disp_name} Total Amps
+    name: ${disp_name} Total Amps 1
     id: "totalAmps"
     lambda: return id(ct1Amps).state + id(ct2Amps).state;
     accuracy_decimals: 2
@@ -135,7 +124,7 @@ sensor:
     update_interval: ${update_time}
     icon: "mdi:flash-circle"
   - platform: template
-    name: ${disp_name} Total Watts
+    name: ${disp_name} Total Watts 1
     id: "totalWatts"
     lambda: return id(ct1Watts).state + id(ct2Watts).state;
     accuracy_decimals: 0
@@ -146,7 +135,7 @@ sensor:
     
 #  Solar Watts and Amps!!
   - platform: template
-    name: ${disp_name} Total Amps
+    name: ${disp_name} Total Amps 2
     id: "totalAmps2"
     lambda: return id(ct3Amps).state + id(ct4Amps).state;
     accuracy_decimals: 2
@@ -154,7 +143,7 @@ sensor:
     update_interval: ${update_time}
     icon: "mdi:flash-circle"
   - platform: template
-    name: ${disp_name} Total Watts
+    name: ${disp_name} Total Watts 2
     id: "totalWatts2"
     lambda: return id(ct3Watts).state + id(ct4Watts).state;
     accuracy_decimals: 0
