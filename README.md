@@ -1,6 +1,12 @@
 # Fork of digiNRG - Whole Home Power Monitoring with ESPHome
 Whole home power monitoring and additional power circuits with ESPHome and Home Assistant. This implementation utilizes the ATM90E32AS based board from CircuitSetup. Other home automation software supporting MQTT can also use this integration.
 
+If you found this project helpful and want to throw a few bones my way I would greatly appreciate it. You have a couple options to do so. One is to make a purchase on Amazon using my affiliate link, donate through buy me a coffee, or toss a couple Satoshi to me using Bitcoin.
+
+https://amzn.to/2v74aiY Amazon affiliate link, any purchases made after clicking this will help support the author. 
+https://www.buymeacoffee.com/Slw0NRx donation link through Buy Me a Coffee. 
+17pEPchqZrjVHv8oN3jKMDZp23A24j4Jj Bitcoin address for direct anonymous gifts.
+
 Video Demostration and Setup - https://youtu.be/BOgy6QbfeZk
 
 ESP Home Information for the atm90e32 -   https://esphome.io/components/sensor/atm90e32.html
@@ -11,7 +17,7 @@ Update 2019/08/24 - For v1.2 of the board your voltage calibration will be high,
 ### Parts List
 [Split Core Current Transformer 100A/50ma](https://amzn.to/2JtuRSt)  
 [ESP32 NodeMCU](https://amzn.to/2XvEBAs)  
-[CircuitSetup 6 Channel or 2 Channel Board](https://circuitsetup.us/index.php/product-category/power-management/)  
+[CircuitSetup 6 Channel, 4 Channel, or 2 Channel Board](https://circuitsetup.us/index.php/product-category/power-management/)  
 [9VAC Power Supply](https://amzn.to/2Jt4uMh)
 
 ### Sample Calibrations for SCT Sizes
@@ -31,6 +37,7 @@ digi_nrg_2chan32.yaml - Included in this repo
 digi_nrg_6chan32.yaml - Included in this repo
 Note: If you elected to add expansion boards, refer to the two physical jumpers on the top of each expansion board. They will identify each of the CS_PINs you will need to include in the 6 channel example above. You can then replicate the code and change the CS_Pin and CT identifiers.
 
-![alt text](https://raw.githubusercontent.com/digiblur/digiNRG_ESPHome/master/jpgs/2chan_board.jpg "2 Channel")  
+![alt text](https://raw.githubusercontent.com/digiblur/digiNRG_ESPHome/master/jpgs/2chan_board.jpg "2 Channel")
+![alt text](https://i0.wp.com/circuitsetup.us/wp-content/uploads/2019/09/energy_meter_solar_kit.jpg "4 Channel")  
 ![alt text](https://raw.githubusercontent.com/digiblur/digiNRG_ESPHome/master/jpgs/6chan_board.jpg "6 Channel")  
 ![alt text](https://raw.githubusercontent.com/digiblur/digiNRG_ESPHome/master/jpgs/sct_100a.jpg "SCT")  
