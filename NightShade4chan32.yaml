@@ -71,8 +71,8 @@ sensor:
         id: "ct1Watts"
         filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
           - multiply: -1.0
-      gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
-      gain_ct: 24131  # Current calibration  
+      gain_voltage: 4100  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
+      gain_ct: 39473  # Current calibration  
     phase_c:
       current:
         name: ${disp_name} CT2 Amps
@@ -83,14 +83,15 @@ sensor:
         id: "ct2Watts"
         filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
           - multiply: -1.0
-      gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
-      gain_ct: 24131  # Current calibration
+      gain_voltage: 4100  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
+      gain_ct: 39473  # Current calibration
     frequency:
       name: ${disp_name} Freq
     line_frequency: 60Hz
     gain_pga: 2X
     update_interval: ${update_time}
-    cs_pin: 6
+  - platform: atm90e32
+    cs_pin: 9  # Pin currently wrong!!!!!
     phase_a:
       voltage:
         name: ${disp_name} Volts
@@ -105,7 +106,7 @@ sensor:
         filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
           - multiply: -1.0
       gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
-      gain_ct: 24131  # Current calibration  
+      gain_ct: 39473  # Current calibration  
     phase_c:
       current:
         name: ${disp_name} CT4 Amps
@@ -117,7 +118,7 @@ sensor:
         filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
           - multiply: -1.0
       gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
-      gain_ct: 24131  # Current calibration
+      gain_ct: 39473  # Current calibration
     frequency:
       name: ${disp_name} Freq
     line_frequency: 60Hz
@@ -160,16 +161,16 @@ sensor:
     unit_of_measurement: W
     icon: "mdi:flash-circle"
     update_interval: ${update_time}
-
+    
+# Daily Energy Section    
   - platform: total_daily_energy
-    name: ${disp_name} Total kWh
+    name: ${disp_name} Total kWh 1
     power_id: totalWatts
     filters:
       - multiply: 0.001
     unit_of_measurement: kWh
-    
-    - platform: total_daily_energy
-    name: ${disp_name} Total kWh
+  - platform: total_daily_energy
+    name: ${disp_name} Total kWh 2
     power_id: totalWatts2
     filters:
       - multiply: 0.001
