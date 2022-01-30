@@ -2,6 +2,7 @@
 Whole home power monitoring and additional power circuits with ESPHome and Home Assistant. This implementation utilizes the ATM90E32AS based board from CircuitSetup. Other home automation software supporting MQTT can also use this integration.
 
 Video Demostration and Setup - https://youtu.be/BOgy6QbfeZk
+
 ESP Home Information for the atm90e32 -   https://esphome.io/components/sensor/atm90e32.html
 
 
