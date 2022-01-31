@@ -1,4 +1,4 @@
-# Fork of digiNRG - Whole Home Power Monitoring with ESPHome
+# Fork of DigiBLur's - Whole Home Power Monitoring with ESPHome
 
 Whole home power monitoring and additional power circuits with ESPHome and Home Assistant. This implementation utilizes the ATM90E32AS based board from CircuitSetup and focuses on integration with HomeAssistant. Other home automation software supporting MQTT can also use this integration.
 
