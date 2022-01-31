@@ -25,7 +25,10 @@ https://circuitsetup.us/product-category/power-management/
 Non-Affiliate Amazon links will be included for the CT's and Trasnformers.
 Please consider using the Amazon Affiliate link above when purchasing if you would like to say thanks!
 
-Amazon search for AC power Adapters - This link has a coupel results that should work.  Remember ALL of the boards sold by CircuitSetup will require a transformer that is between 9V AC and 12V AC.  Anything that is DC WILL NOT WORK!!!!!!!!!!  Also note that the plug is a 2.5MM anything smaller will have issues and anything larger WILL NOT WORK.!!
+Amazon search for AC power Adapters - This link has a coupel results that should work.  Remember ALL of the boards sold by CircuitSetup will
+require a transformer that is between 9V AC and 12V AC.  Anything that is DC WILL NOT WORK!!  
+Also note that the plug is a 2.5MM anything smaller will have issues and anything larger WILL NOT WORK.!!
+At this point Amazon only has 3 transformers that are compatible.
 
 https://www.amazon.com/s?k=%22ac+to+ac%22+%22transformer%22+%222.5mm%22&crid=3SA7VWBELKP5S&sprefix=ac+to+ac+transformer+2.5mm+%2Caps%2C103&ref=nb_sb_noss
 
@@ -33,6 +36,8 @@ Amazon search for SCT's - Choose something that will support your expexted loads
 If you are doing a main panel setup take your panel service rating, most modern new installs will be a 200 Amp service, and choose two SCT's that will equal at minimum
 what the main breaker will support divided in half.  In the US A 200 Amp panel should have two SCT's that are equal to at least 100 Amps.
 In countries that ARE NOT split phase you should theoretically be able to use these meters but will need a SCT that can support the entire panel amperage.
+There are multiple available but sticking with something that is similar in capacities is best.  Also different brands will have different values.
+If you buy something and can't find the exact value set something close and then use a Kill-A-Watt to figure the amperage used.
 https://www.amazon.com/s?k=Non-invasive+AC+Current+Sensor+Split+Core+Transformer&crid=3URMBOOXJLNRR&sprefix=non-invasive+ac+current+sensor+split+core+transformer%2Caps%2C105&ref=nb_sb_noss
 
 ### Sample Calibrations for AC Transformer
@@ -55,6 +60,11 @@ For meter <= v1.2:
 
 For meter > v1.3:
 7305 - 9v AC Transformer
+
+When you have the voltage calibration set you will have to fine tune it.  To do so use the following formula:
+New gain_voltage Value = (your voltage reading / ESPHome voltage reading) * existing gain_voltage value
+You should measure the voltage at or near the point where your adapter is plugged in.  Circuits that are further away will show slightly different voltages. 
+Also remember that split phase power CAN have different voltages on each phase do not assume they are the same.
 
 ### Sample Calibrations for SCT's
 Here are common current calibration values for the Split Single Phase Energy Meter when gain_pga is set to 4X:
