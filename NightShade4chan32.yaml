@@ -41,7 +41,7 @@ spi:
   miso_pin: 19
   mosi_pin: 23
 
-sensor:
+sensor:  #  I suggest using CT1 and CT2 for grid power with CT3 and CT4 for solar power.
   - platform: wifi_signal
     name: ${disp_name} WiFi Signal
     filters:
@@ -125,14 +125,14 @@ sensor:
     accuracy_decimals: 2
     unit_of_measurement: A
     update_interval: ${update_time}
-    icon: "mdi:flash-circle"
+    icon: "mdi:current-ac"
   - platform: template
     name: ${disp_name} Total Watts 1
     id: "totalWatts"
     lambda: return id(ct1Watts).state + id(ct2Watts).state;
     accuracy_decimals: 0
     unit_of_measurement: W
-    icon: "mdi:flash-circle"
+    icon: "mdi:lightning-bolt-outline"
     update_interval: ${update_time}
     
     
@@ -144,14 +144,14 @@ sensor:
     accuracy_decimals: 2
     unit_of_measurement: A
     update_interval: ${update_time}
-    icon: "mdi:flash-circle"
+    icon: "mdi:current-ac"
   - platform: template
     name: ${disp_name} Total Watts 2
     id: "totalWatts2"
     lambda: return id(ct3Watts).state + id(ct4Watts).state;
     accuracy_decimals: 0
     unit_of_measurement: W
-    icon: "mdi:flash-circle"
+    icon: "mdi:lightning-bolt-outline"
     update_interval: ${update_time}
     
 # Daily Energy Section    
@@ -161,12 +161,14 @@ sensor:
     filters:
       - multiply: 0.001
     unit_of_measurement: kWh
+    icon: "mdi:transmission-tower"
   - platform: total_daily_energy
     name: ${disp_name} Total kWh 2
     power_id: totalWatts2
     filters:
       - multiply: 0.001
     unit_of_measurement: kWh
+    icon: "mdi:solar-power"
 
 time:  #Pull current time information SNTP must be used if API is disabled above.  Recommend using API if your devices will not have internet access!!
 #  - platform: sntp  #Use NTP time protocol.  This will automatically pull time information on bootup from default NTP servers.
