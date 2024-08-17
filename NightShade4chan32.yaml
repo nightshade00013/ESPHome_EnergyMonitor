@@ -5,36 +5,49 @@ substitutions:
   
 esphome:
   name: $devicename
-  platform: ESP32
+esp32:
   board: nodemcu-32s
 
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_pass
+  ssid: !secret wifi_ssid  #either place in your "Secrets" file or put the desired information
+  password: !secret wifi_password #either place in your "Secrets" file or put the desired information
   manual_ip:  # Static IP address information.  Recomended to be set for your devices but can be commented out (#) to use DHCP.
-    static_ip: !secret ip_address
-    gateway: !secret ip_gateway
-    subnet: !secret ip_subnet
-#    dns1: !secret ip_dns1  #Remove or comment out to prevent DNS access.
-         
-  ap:  # Enable fallback hotspot (captive portal) in case wifi connection fails
+    static_ip: #!secret ip_address_energymeter
+    gateway: #!secret ip_gateway
+    subnet: #!secret ip_subnet  Generally 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
     ssid: "${disp_name} Hotspot"
-    password: "Sup3r_Secre7_P@ssword"  #Change to whatever you would like or remove for open AP mode access
+    password: !secret ap_password #either place in your "Secrets" file or put the desired information
+  reboot_timeout: 0s #Prevents the ESP from rebooting at odd times
+
+captive_portal:
 
 #mqtt:  # Comment out this section if using API with (#) 
 #  broker: !secret mqtt_broker
 #  username: !secret mqtt_user
 #  password: !secret mqtt_pass
 
-logger:   # Enable logging
+api: #now requried by ESPhome
+  encryption:  
+    key: !secret api_key  #insert an encryption key or place it in your "Secrets" file
 
-api:  # Comment out this section if using MQTT with (#)  If Disabled you can only pull Time from a NTP server, READ BELOW!!!
+ota:  #now requried by ESPhome
+  - platform: esphome
+    password: !secret ota_password #insert an Over The Air update password or place it in your "Secrets" file
 
-ota: #Enable OTA Updates, comment out (#) this section if you do not want to wirelessly update.  !!Warning, this will require using a cable if commented out.!!
-  #password: "Sup3r_Secre7_P@ssword"  # Super Secret OTA Password.  Uncomment to secure OTA Updating
-  
-web_server:  #Display information available on a web page to troubleshoot directly or access via web page.  The Sensor information will be displayed in a table along with a debug log.
+logger:
+
+web_server:  
   port: 80
+
+time:  #Pull current time information SNTP must be used if API is disabled above.  Recommend using API if your devices will not have internet access!!
+#  - platform: sntp  #Use NTP time protocol.  This will automatically pull time information on bootup from default NTP servers.
+#    id: sntp_time
+    
+  - platform: homeassistant  #Use current HomeAssistant time.  This will automatically pull time from HomeAssistant on a regular basis though the API.
+    id: homeassistant_time
 
 spi:
   clk_pin: 18
@@ -52,7 +65,7 @@ sensor:  #  I suggest using CT1 and CT2 for grid power with CT3 and CT4 for sola
     cs_pin: 5
     phase_a:
       voltage:
-        name: ${disp_name} Volts
+        name: ${disp_name} Volts 1
         accuracy_decimals: 1
       current:
         name: ${disp_name} CT1 Amps
@@ -73,20 +86,20 @@ sensor:  #  I suggest using CT1 and CT2 for grid power with CT3 and CT4 for sola
         name: ${disp_name} CT2 Watts
         accuracy_decimals: 1
         id: "ct2Watts"
-        filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
-          - multiply: -1.0
+#        filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
+#          - multiply: -1.0
       gain_voltage: 4100  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
       gain_ct: 39473  # Current calibration
     frequency:
-      name: ${disp_name} Freq
+      name: ${disp_name} Freq 1
     line_frequency: 60Hz
     gain_pga: 2X
     update_interval: ${update_time}
   - platform: atm90e32
-    cs_pin: 4  # Warnings will pop but it's hard wired.
+    cs_pin: 4
     phase_a:
       voltage:
-        name: ${disp_name} Volts
+        name: ${disp_name} Volts 2
         accuracy_decimals: 1
       current:
         name: ${disp_name} CT3 Amps
@@ -97,7 +110,7 @@ sensor:  #  I suggest using CT1 and CT2 for grid power with CT3 and CT4 for sola
         id: "ct3Watts"
         filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
           - multiply: -1.0
-      gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
+      gain_voltage: 4000  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
       gain_ct: 39473  # Current calibration  
     phase_c:
       current:
@@ -109,10 +122,10 @@ sensor:  #  I suggest using CT1 and CT2 for grid power with CT3 and CT4 for sola
         id: "ct4Watts"
         filters:  # If the wattage is backwards due to the phase 180 degrees from the clamp direction
           - multiply: -1.0
-      gain_voltage: 3900  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
+      gain_voltage: 3850  # Voltage calibration  https://esphome.io/components/sensor/atm90e32.html#calibration
       gain_ct: 39473  # Current calibration
     frequency:
-      name: ${disp_name} Freq
+      name: ${disp_name} Freq 2
     line_frequency: 60Hz
     gain_pga: 2X
     update_interval: ${update_time}
@@ -169,13 +182,6 @@ sensor:  #  I suggest using CT1 and CT2 for grid power with CT3 and CT4 for sola
       - multiply: 0.001
     unit_of_measurement: kWh
     icon: "mdi:solar-power"
-
-time:  #Pull current time information SNTP must be used if API is disabled above.  Recommend using API if your devices will not have internet access!!
-#  - platform: sntp  #Use NTP time protocol.  This will automatically pull time information on bootup from default NTP servers.
-#    id: sntp_time
-    
-  - platform: homeassistant  #Use current HomeAssistant time.  This will automatically pull time from HomeAssistant on a regular basis though the API.
-    id: homeassistant_time
 
 switch:  #Shows a "Toggle" button on the Web Page to restart the device.
   - platform: restart
