@@ -1,5 +1,10 @@
 # Fork of DigiBLur's - Whole Home Power Monitoring with ESPHome
 
+----------Major Update 08/17/2024----------
+ESPhome now requires a different format for the board selection and is basically forcing OTA passwords as well as encryption.
+All yaml files have been updated to reflect these changes if you have any issues with your current configuration then please compare your current code to the modified versions included herein.
+----------End Update 08/17/2024----------
+
 Whole home power monitoring and additional power circuits with ESPHome and Home Assistant. This implementation utilizes the ATM90E32AS based board from CircuitSetup and focuses on integration with HomeAssistant. Other home automation software supporting MQTT can also use this integration.
 
 If you found this project helpful and want to throw a few bones my way I would greatly appreciate it. You have a couple options to do so. One is to make a purchase on Amazon using my affiliate link, donate through buy me a coffee, or toss a couple Satoshi to me using Bitcoin.
@@ -18,7 +23,7 @@ https://esphome.io/components/sensor/atm90e32.html
 
 Update 2019/08/24 - For v1.2 of the board your voltage calibration will be high, >64,000. This is normal.
 Update 2022/01/30 - Major changes in this fork of the repo plus major adjustments to the read me files.  These changes should make things much easier to use.
-
+Update 2024/08/17 - Added in ESPhome board config modifications for the ESP32 as well as the OTA update password and encryption sections.  Moved time component to before the meter config.
 
 Compatible parts for this setup can easily be found here:
 https://circuitsetup.us/product-category/power-management/
