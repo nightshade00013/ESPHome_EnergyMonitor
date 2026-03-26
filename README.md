@@ -1,5 +1,12 @@
 # Fork of DigiBLur's - Whole Home Power Monitoring with ESPHome
 
+----------Update 03/25/2026--------------
+I am going to be archiving this repository and moving everything into a single place where all of my ESPHome Builder files will live.
+The new Repository is being reworked from the ground up and will contain all the information I can give to help others set things up.
+Head to https://github.com/nightshade00013/MuttMutt-ESPHome
+ 
+# https://www.muttmutt.us/your-welcome-here-is-how-you-can-say-thank-you/
+
 ----------Major Update 08/17/2024----------
 ESPhome now requires a different format for the board selection and is basically forcing OTA passwords as well as encryption.
 All yaml files have been updated to reflect these changes if you have any issues with your current configuration then please compare your current code to the modified versions included herein.
